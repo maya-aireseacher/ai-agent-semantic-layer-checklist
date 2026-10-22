@@ -1,0 +1,18 @@
+id,item,rationale,owner
+1,Document every table and column the agent may access including sensitivity classification and owning team,Agents cannot infer data sensitivity or ownership from schema names alone,Data Platform Team
+2,Define business-vocabulary mappings for every concept the agent will be asked about,Raw schemas use implementation names; agents need a common business vocabulary to select the correct tables,Semantic Layer Owner
+3,Specify which roles or individuals are authorized to see each semantic entity and enforce this at query time,Describing authorization in metadata does not prevent the agent from returning restricted data to unauthorized users,Security Team
+4,Implement minimum-necessary permission scoping,Agents should not operate with union permissions that let them bypass row-level or column-level security,Security Team
+5,Time-bound agent access and require re-authorization after a defined period,Persistent credentials enable long-lived exposure if an agent is compromised or misconfigured,Security Team
+6,Log every query the agent generates including requesting user timestamp semantic intent and SQL executed,Without logs you cannot diagnose over-permissioned queries or trace data exfiltration after the fact,Data Platform Team
+7,Test the agent against realistic ambiguous or adversarial questions,Benign test queries will not surface the agent's behavior when a user requests restricted information,AI Engineering Lead
+8,Establish a rollback procedure to revoke agent access within one business day,You must be able to disable the agent without disrupting core operations,Data Platform Team
+9,Validate every agent-generated query against a known-good query catalog before execution,Structural validation can catch malformed or suspicious queries that bypass semantic-layer guardrails,Data Platform Team
+10,Filter agent output to remove any column not explicitly declared in the semantic layer,Agents may select columns outside the intended business vocabulary if schema introspection is allowed,Semantic Layer Owner
+11,Rate-limit agent queries per user and per session,High-frequency queries may indicate automated data extraction rather than interactive analysis,Security Team
+12,Review agent query logs weekly with a data steward,Emergent misuse or confusion often appears in aggregate patterns not in any single query,Data Steward
+13,Document every business metric the agent is expected to surface and validate its query logic,Divergence between agent-reported metrics and dashboard metrics erodes trust,BI Team
+14,Require governance review before adding new tables or columns to the semantic layer,Expanding the vocabulary also expands the attack surface,Governance Officer
+15,Test the agent's behavior when a user asks a question spanning multiple permission boundaries,Cross-boundary queries are a common failure mode; the agent must deny or redact properly,AI Engineering Lead
+16,Define an incident-response playbook for scenarios where the agent returns unauthorized data,Detection is only useful if your team knows who to notify and how to contain the exposure,Security Team
+17,Maintain a contact list of data owners for every table in the semantic layer,Data owners are often the first to recognize when usage does not match legitimate business activity,Data Platform Team
